@@ -21,44 +21,12 @@
     // Override point for customization after application launch.
     
     //Initialize new Data
-    People *Alfred = [NSEntityDescription insertNewObjectForEntityForName:@"People"
-                                                   inManagedObjectContext:self.managedObjectContext];
-    Alfred.name = @"Alfred";
-    Alfred.age = @80;
-    Alfred.lastname = @"Hitchcock";
-    Alfred.department = @"Directors";
+    NSError *error = nil;
+    NSArray *peoplesStored = [self.managedObjectContext executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"People"] error:&error];
+    //create dummydata only once
+    if ([peoplesStored count] != 5)
+        [self createDummyData];
     
-    People *Lionel = [NSEntityDescription insertNewObjectForEntityForName:@"People"
-                                                   inManagedObjectContext:self.managedObjectContext];
-    Lionel.name = @"Lionel";
-    Lionel.age = @70;
-    Lionel.lastname = @"Richie";
-    Lionel.department = @"Singer";
-    
-    People *Sandra = [NSEntityDescription insertNewObjectForEntityForName:@"People"
-                                                   inManagedObjectContext:self.managedObjectContext];
-    Sandra.name = @"Sandra";
-    Sandra.age = @50;
-    Sandra.lastname = @"Bullock";
-    Sandra.department = @"Actress";
-    
-    People *Keanu = [NSEntityDescription insertNewObjectForEntityForName:@"People"
-                                                   inManagedObjectContext:self.managedObjectContext];
-    Keanu.name = @"Keanu";
-    Keanu.age = @50;
-    Keanu.lastname = @"Reeves";
-    Keanu.department = @"Director";
-    
-
-    People *Jennifer = [NSEntityDescription insertNewObjectForEntityForName:@"People"
-                                                  inManagedObjectContext:self.managedObjectContext];
-    Jennifer.name = @"Jennifer";
-    Jennifer.age = @46;
-    Jennifer.lastname = @"Aniston";
-    Jennifer.department = @"Actress";
-
-    
-    [self saveContext];
     
     return YES;
 }
@@ -165,6 +133,48 @@
             abort();
         }
     }
+}
+
+- (void)createDummyData{
+    People *Alfred = [NSEntityDescription insertNewObjectForEntityForName:@"People"
+                                                   inManagedObjectContext:self.managedObjectContext];
+    Alfred.name = @"Alfred";
+    Alfred.age = @80;
+    Alfred.lastname = @"Hitchcock";
+    Alfred.department = @"Directors";
+    
+    People *Lionel = [NSEntityDescription insertNewObjectForEntityForName:@"People"
+                                                   inManagedObjectContext:self.managedObjectContext];
+    Lionel.name = @"Lionel";
+    Lionel.age = @70;
+    Lionel.lastname = @"Richie";
+    Lionel.department = @"Singer";
+    
+    People *Sandra = [NSEntityDescription insertNewObjectForEntityForName:@"People"
+                                                   inManagedObjectContext:self.managedObjectContext];
+    Sandra.name = @"Sandra";
+    Sandra.age = @50;
+    Sandra.lastname = @"Bullock";
+    Sandra.department = @"Actress";
+    
+    People *Keanu = [NSEntityDescription insertNewObjectForEntityForName:@"People"
+                                                  inManagedObjectContext:self.managedObjectContext];
+    Keanu.name = @"Keanu";
+    Keanu.age = @50;
+    Keanu.lastname = @"Reeves";
+    Keanu.department = @"Directors";
+    
+    
+    People *Jennifer = [NSEntityDescription insertNewObjectForEntityForName:@"People"
+                                                     inManagedObjectContext:self.managedObjectContext];
+    Jennifer.name = @"Jennifer";
+    Jennifer.age = @46;
+    Jennifer.lastname = @"Aniston";
+    Jennifer.department = @"Actress";
+    
+    
+    [self saveContext];
+
 }
 
 @end

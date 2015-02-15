@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
+#import "People.h"
 
 @interface ViewController ()<UITableViewDataSource, NSFetchedResultsControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -47,9 +48,21 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"exampleIdentifier"];
-    cell.textLabel.text = @"";
-    cell.detailTextLabel.text = @"";
+    People *peopleObject  = [self peopleWithIndexPath:indexPath];
+    cell.textLabel.text   = peopleObject.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Aged %@", [peopleObject.age stringValue]];
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return [(People*)[self peopleWithIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]] department];
+}
+
+#pragma mark - instance methods
+
+- (People*)peopleWithIndexPath:(NSIndexPath*)indexPath{
+    People *peopleObject = [self.fetchedResultController objectAtIndexPath:indexPath];
+    return peopleObject;
 }
 
 #pragma mark - properties

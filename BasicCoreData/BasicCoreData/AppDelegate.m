@@ -24,7 +24,7 @@
     NSError *error = nil;
     NSArray *peoplesStored = [self.managedObjectContext executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"People"] error:&error];
     //create dummydata only once
-    if ([peoplesStored count] != 5)
+    if ([peoplesStored count] < 5)
         [self createDummyData];
     
     
@@ -115,7 +115,7 @@
     if (!coordinator) {
         return nil;
     }
-    _managedObjectContext = [[NSManagedObjectContext alloc] init];
+    _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     return _managedObjectContext;
 }
@@ -143,6 +143,13 @@
     Alfred.lastname = @"Hitchcock";
     Alfred.department = @"Directors";
     
+    People *Keanu = [NSEntityDescription insertNewObjectForEntityForName:@"People"
+                                                  inManagedObjectContext:self.managedObjectContext];
+    Keanu.name = @"Keanu";
+    Keanu.age = @50;
+    Keanu.lastname = @"Reeves";
+    Keanu.department = @"Directors";
+    
     People *Lionel = [NSEntityDescription insertNewObjectForEntityForName:@"People"
                                                    inManagedObjectContext:self.managedObjectContext];
     Lionel.name = @"Lionel";
@@ -157,13 +164,6 @@
     Sandra.lastname = @"Bullock";
     Sandra.department = @"Actress";
     
-    People *Keanu = [NSEntityDescription insertNewObjectForEntityForName:@"People"
-                                                  inManagedObjectContext:self.managedObjectContext];
-    Keanu.name = @"Keanu";
-    Keanu.age = @50;
-    Keanu.lastname = @"Reeves";
-    Keanu.department = @"Directors";
-    
     
     People *Jennifer = [NSEntityDescription insertNewObjectForEntityForName:@"People"
                                                      inManagedObjectContext:self.managedObjectContext];
@@ -172,9 +172,7 @@
     Jennifer.lastname = @"Aniston";
     Jennifer.department = @"Actress";
     
-    
     [self saveContext];
-
 }
 
 @end

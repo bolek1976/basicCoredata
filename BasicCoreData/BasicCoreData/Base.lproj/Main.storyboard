@@ -51,21 +51,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="D5p-IC-Y04"/>
-                        <barButtonItem title="Add one clean" id="YKv-vP-3dn">
-                            <connections>
-                                <action selector="addEntryAction:" destination="BYZ-38-t0r" id="ONA-v9-Ptv"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="PZu-3f-pgE">
                         <barButtonItem key="leftBarButtonItem" title="Remove one" id="ehU-iC-gpa">
                             <connections>
                                 <action selector="removeEntryAction:" destination="BYZ-38-t0r" id="o4Z-Lg-lTU"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" tag="100" title="Add one dirty" id="uWV-QF-Xwv">
+                        <barButtonItem key="rightBarButtonItem" tag="100" title="Add one" id="uWV-QF-Xwv">
                             <connections>
                                 <action selector="addEntryAction:" destination="BYZ-38-t0r" id="ul4-iF-3vQ"/>
                             </connections>

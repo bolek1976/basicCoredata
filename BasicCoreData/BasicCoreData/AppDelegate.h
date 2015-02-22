@@ -13,9 +13,15 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+//coreDataStack
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+//data
+@property (readwrite, strong, nonatomic) NSArray     *peopleNameFeed;
+@property (readwrite, strong, nonatomic) NSArray     *peopleLastNameFeed;
+@property (readwrite, strong, nonatomic) NSArray     *departmentNameFeed;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

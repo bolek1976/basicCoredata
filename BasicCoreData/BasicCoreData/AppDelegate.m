@@ -141,28 +141,34 @@
     Alfred.name = @"Alfred";
     Alfred.age = @80;
     Alfred.lastname = @"Hitchcock";
-    Alfred.department = @"Directors";
+    Alfred.department = self.departmentNameFeed[0];
+    [self saveContext];
+
     
     People *Keanu = [NSEntityDescription insertNewObjectForEntityForName:@"People"
                                                   inManagedObjectContext:self.managedObjectContext];
+
     Keanu.name = @"Keanu";
     Keanu.age = @50;
     Keanu.lastname = @"Reeves";
-    Keanu.department = @"Directors";
+    Keanu.department = self.departmentNameFeed[0];
     
     People *Lionel = [NSEntityDescription insertNewObjectForEntityForName:@"People"
                                                    inManagedObjectContext:self.managedObjectContext];
+    
+    [self saveContext];
+
     Lionel.name = @"Lionel";
     Lionel.age = @70;
     Lionel.lastname = @"Richie";
-    Lionel.department = @"Singer";
+    Lionel.department = self.departmentNameFeed[1];
     
     People *Sandra = [NSEntityDescription insertNewObjectForEntityForName:@"People"
                                                    inManagedObjectContext:self.managedObjectContext];
     Sandra.name = @"Sandra";
     Sandra.age = @50;
     Sandra.lastname = @"Bullock";
-    Sandra.department = @"Actress";
+    Sandra.department =self.departmentNameFeed[2];;
     
     
     People *Jennifer = [NSEntityDescription insertNewObjectForEntityForName:@"People"
@@ -170,9 +176,37 @@
     Jennifer.name = @"Jennifer";
     Jennifer.age = @46;
     Jennifer.lastname = @"Aniston";
-    Jennifer.department = @"Actress";
+    Jennifer.department = self.departmentNameFeed[2];;
     
     [self saveContext];
 }
+
+#pragma mark - properties
+- (NSArray *)peopleLastNameFeed{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _peopleLastNameFeed = @[@"Seed", @"Travolta", @"Einstein", @"Jojovich"];
+    });
+    return _peopleLastNameFeed;
+}
+
+- (NSArray *)departmentNameFeed{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _departmentNameFeed = @[@"Directors", @"Singers", @"Actress"];
+    });
+    return _departmentNameFeed;
+}
+
+- (NSArray *)peopleNameFeed{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _peopleNameFeed  = @[@"Mila", @"Jhon", @"Albert", @"Jhoseph"];
+    });
+    
+    return _peopleNameFeed;
+}
+
+
 
 @end

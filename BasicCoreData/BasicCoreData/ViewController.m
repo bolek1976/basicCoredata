@@ -27,18 +27,14 @@
     // this is not weird, its just a private instance variable aka .ivar, as i do not need a property for this
     // , the memory access will be pretty much faster than with a synthetized property. Its not a good pattern have your AppDelegate with tons of global variables but for this simple example its ok.
   __block  AppDelegate *_appDelegate;
-    NSArray     *_peopleNameSeed;
-    NSArray     *_peopleLastNameSeed;
+
 }
 
 #pragma mark - ViewLifeCycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     _appDelegate        = [UIApplication sharedApplication].delegate;
-    _peopleNameSeed     = @[@"Mila", @"Jhon", @"Albert", @"Jhoseph"];
-    _peopleLastNameSeed = @[@"Seed", @"Travolta", @"Einstein", @"Jojovich"];
-    
+     _appDelegate       = [UIApplication sharedApplication].delegate;
     self.navigationController.edgesForExtendedLayout =  UIRectEdgeBottom;
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -68,7 +64,11 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return [(People*)[self peopleWithIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]] department];
+    /*
+     get an object that conforms to NSFetchedResultsSectionInfo wich have the information of the section such as title, name, number of objects per sections (rows). We can use this kind of objects because on our fetchedresultcontroller we have the section name keypath defined.
+     */
+    id<NSFetchedResultsSectionInfo> sectionInfoObject = (id<NSFetchedResultsSectionInfo>)[self.fetchedResultController sections][section];
+    return [sectionInfoObject name];
 }
 
 #pragma mark - instance methods
@@ -129,10 +129,10 @@
         People *randomPeople = [NSEntityDescription insertNewObjectForEntityForName:@"People"                                                                       inManagedObjectContext:localContext];
         
         int index = arc4random_uniform(3);
-        randomPeople.name = _peopleNameSeed[index];
+        randomPeople.name = _appDelegate.peopleNameFeed[index];
         randomPeople.age  = @(50+index);
-        randomPeople.lastname = _peopleLastNameSeed[index];
-        randomPeople.department = @"Directors";
+        randomPeople.lastname = _appDelegate.peopleLastNameFeed[index];
+        randomPeople.department = _appDelegate.departmentNameFeed[index];
 
     } completion:^(BOOL finished) {
         if (finished)
@@ -143,6 +143,26 @@
 }
 
 - (IBAction)removeEntryAction:(id)sender {
+    
+    NSInteger  numberOfSections = [[self.fetchedResultController sections] count];
+    
+    NSUInteger randomSection    = arc4random_uniform((u_int32_t)numberOfSections);
+    
+    if (!(numberOfSections > 0)  ) {
+        return;
+    }
+
+    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultController sections][randomSection];
+   
+    NSInteger numberOfRows = [sectionInfo numberOfObjects];
+    
+    NSInteger randomRow = arc4random_uniform((u_int32_t)numberOfRows);
+    
+    
+    People *peopleObject = (People*)[self.fetchedResultController objectAtIndexPath:[NSIndexPath indexPathForRow:randomRow inSection:randomSection]];
+    
+    [_appDelegate.managedObjectContext deleteObject:peopleObject];
+    [_appDelegate saveContext];
 }
 
 

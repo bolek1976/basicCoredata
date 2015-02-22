@@ -10,7 +10,7 @@
 
 @interface ViewController : UIViewController
 
-+ (void)saveInbackgroundOnPrivateQueue:(void(^)(NSManagedObjectContext *localContext))block
+- (void)saveInbackgroundOnPrivateQueue:(void(^)(NSManagedObjectContext *localContext))block
                             completion:(void(^)(BOOL finished))finished;
 @end
 

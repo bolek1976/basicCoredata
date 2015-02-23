@@ -1,4 +1,2 @@
 language: objective-c
-xcode_project: BasicCoreData.xcodeproj 
-xcode_scheme: BasicCoreData
-xcode_sdk: iphonesimulator8.0
+

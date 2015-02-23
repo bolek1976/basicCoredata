@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+
 
 @interface ViewController : UIViewController
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultController;
 
-- (void)saveInbackgroundOnPrivateQueue:(void(^)(NSManagedObjectContext *localContext))block
-                            completion:(void(^)(BOOL finished))finished;
 @end
 

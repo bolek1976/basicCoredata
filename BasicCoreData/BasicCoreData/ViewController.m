@@ -7,34 +7,33 @@
 //
 
 #import "ViewController.h"
-#import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 #import "People.h"
+#import "CoreDataDAL.h"
 
 
 @interface ViewController ()<UITableViewDataSource,UITableViewDelegate, NSFetchedResultsControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultController;
 @end
 
 @implementation ViewController{
     /*
     Apple say It’s best practice to use a property on an object any time you need to keep track of a value or another object.
     If you do need to define your own instance variables without declaring a property, you can add them inside braces at the top of the class interface or implementation
-     */
     
+    this is not weird, its just a private instance variable aka .ivar, as i do not need a property for this
+    , the memory access will be pretty much faster than with a synthetized property. Its not a good pattern have your AppDelegate with tons of global variables but for this simple example its ok.
+  */
     
-    // this is not weird, its just a private instance variable aka .ivar, as i do not need a property for this
-    // , the memory access will be pretty much faster than with a synthetized property. Its not a good pattern have your AppDelegate with tons of global variables but for this simple example its ok.
-  __block  AppDelegate *_appDelegate;
-
+    AppDelegate *_appDelegate;
 }
 
 #pragma mark - ViewLifeCycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     _appDelegate       = [UIApplication sharedApplication].delegate;
+     _appDelegate = [UIApplication sharedApplication].delegate;
+
     self.navigationController.edgesForExtendedLayout =  UIRectEdgeBottom;
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -86,45 +85,12 @@
 #pragma mark - UIActions
 
 
-- (void)saveInbackgroundOnPrivateQueue:(void(^)(NSManagedObjectContext *localContext))block
-                            completion:(void(^)(BOOL finished))finished
-{
-    __strong typeof(_appDelegate) strongSelf = _appDelegate;
-    
-    dispatch_queue_t backgroundQ = dispatch_queue_create("bcf.concurrentQ.test", DISPATCH_QUEUE_CONCURRENT);
-  
-    //our concurrent queue to save thousands of petabytes without blocking the ui
-  dispatch_async(backgroundQ, ^{
-      NSManagedObjectContext *privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-      NSManagedObjectContext *mainContext = strongSelf.managedObjectContext;
-        privateContext.parentContext = mainContext;
-        
-        [privateContext performBlockAndWait:^{
-            if (block)
-                block(privateContext);
-        }];
-        
-        NSError *error;
-        BOOL successSave = [privateContext save:&error];
-      
-      //return the save to the main queue
-      dispatch_async(dispatch_get_main_queue(), ^{
-          if (!successSave)
-              finished(NO);
-          else
-              finished(YES);
-      });
-      
-  });
-    
-}
-
 - (IBAction)addEntryAction:(id)sender {
     //create a private context/
     
     //This is a private context, used for CRUD operations on objects without fire KVO notifications because does not operate on the main threat
 
-    [self saveInbackgroundOnPrivateQueue:^(NSManagedObjectContext *localContext) {
+    [CoreDataDAL saveInbackgroundOnPrivateQueue:^(NSManagedObjectContext *localContext) {
         
         People *randomPeople = [NSEntityDescription insertNewObjectForEntityForName:@"People"                                                                       inManagedObjectContext:localContext];
         

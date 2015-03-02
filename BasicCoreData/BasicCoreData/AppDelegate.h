@@ -23,7 +23,7 @@
 @property (readwrite, strong, nonatomic) NSArray     *peopleLastNameFeed;
 @property (readwrite, strong, nonatomic) NSArray     *departmentNameFeed;
 
-- (void)saveContext;
+- (BOOL)saveContext:(NSManagedObjectContext*)context;
 - (NSURL *)applicationDocumentsDirectory;
 
 

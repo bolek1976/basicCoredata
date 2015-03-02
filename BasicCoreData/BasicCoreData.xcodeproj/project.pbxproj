@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		07B25A3D1A9B36A300FC5E9B /* CoreDataDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B25A3C1A9B36A300FC5E9B /* CoreDataDAL.m */; };
+		07B25A411A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B25A401A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.m */; };
 		07CD84B41A8F68EF00CE1AF3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CD84B31A8F68EF00CE1AF3 /* main.m */; };
 		07CD84B71A8F68EF00CE1AF3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CD84B61A8F68EF00CE1AF3 /* AppDelegate.m */; };
 		07CD84BA1A8F68EF00CE1AF3 /* BasicCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07CD84B81A8F68EF00CE1AF3 /* BasicCoreData.xcdatamodeld */; };
@@ -15,7 +16,6 @@
 		07CD84C01A8F68EF00CE1AF3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07CD84BE1A8F68EF00CE1AF3 /* Main.storyboard */; };
 		07CD84C21A8F68EF00CE1AF3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07CD84C11A8F68EF00CE1AF3 /* Images.xcassets */; };
 		07CD84C51A8F68EF00CE1AF3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07CD84C31A8F68EF00CE1AF3 /* LaunchScreen.xib */; };
-		07CD84D11A8F68EF00CE1AF3 /* BasicCoreDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CD84D01A8F68EF00CE1AF3 /* BasicCoreDataTests.m */; };
 		07CD84DC1A8F69E800CE1AF3 /* People.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CD84DB1A8F69E800CE1AF3 /* People.m */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +32,8 @@
 /* Begin PBXFileReference section */
 		07B25A3B1A9B36A300FC5E9B /* CoreDataDAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataDAL.h; sourceTree = "<group>"; };
 		07B25A3C1A9B36A300FC5E9B /* CoreDataDAL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataDAL.m; sourceTree = "<group>"; };
+		07B25A3F1A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+Concurrent.h"; sourceTree = "<group>"; };
+		07B25A401A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Concurrent.m"; sourceTree = "<group>"; };
 		07CD84AE1A8F68EF00CE1AF3 /* BasicCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07CD84B21A8F68EF00CE1AF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07CD84B31A8F68EF00CE1AF3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -45,7 +47,6 @@
 		07CD84C41A8F68EF00CE1AF3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		07CD84CA1A8F68EF00CE1AF3 /* BasicCoreDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BasicCoreDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07CD84CF1A8F68EF00CE1AF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		07CD84D01A8F68EF00CE1AF3 /* BasicCoreDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BasicCoreDataTests.m; sourceTree = "<group>"; };
 		07CD84DA1A8F69E800CE1AF3 /* People.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = People.h; sourceTree = "<group>"; };
 		07CD84DB1A8F69E800CE1AF3 /* People.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = People.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,9 +78,19 @@
 			name = DAL;
 			sourceTree = "<group>";
 		};
+		07B25A3E1A9F3E4400FC5E9B /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				07B25A3F1A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.h */,
+				07B25A401A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		07CD84A51A8F68EF00CE1AF3 = {
 			isa = PBXGroup;
 			children = (
+				07B25A3E1A9F3E4400FC5E9B /* Categories */,
 				07B25A3A1A9B365800FC5E9B /* DAL */,
 				07CD84B01A8F68EF00CE1AF3 /* BasicCoreData */,
 				07CD84CD1A8F68EF00CE1AF3 /* BasicCoreDataTests */,
@@ -124,7 +135,6 @@
 		07CD84CD1A8F68EF00CE1AF3 /* BasicCoreDataTests */ = {
 			isa = PBXGroup;
 			children = (
-				07CD84D01A8F68EF00CE1AF3 /* BasicCoreDataTests.m */,
 				07CD84CE1A8F68EF00CE1AF3 /* Supporting Files */,
 			);
 			path = BasicCoreDataTests;
@@ -254,6 +264,7 @@
 				07CD84BD1A8F68EF00CE1AF3 /* ViewController.m in Sources */,
 				07B25A3D1A9B36A300FC5E9B /* CoreDataDAL.m in Sources */,
 				07CD84B41A8F68EF00CE1AF3 /* main.m in Sources */,
+				07B25A411A9F3E7D00FC5E9B /* NSManagedObjectContext+Concurrent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,7 +272,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07CD84D11A8F68EF00CE1AF3 /* BasicCoreDataTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

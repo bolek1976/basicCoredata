@@ -24,7 +24,7 @@
     NSError *error = nil;
     NSArray *peoplesStored = [self.managedObjectContext executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"People"] error:&error];
     //create dummydata only once
-    if ([peoplesStored count] < 5)
+    if ([peoplesStored count] == 0)
         [self createDummyData];
     
     
@@ -52,7 +52,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
-    [self saveContext];
+    [self saveContext:self.managedObjectContext];
 }
 
 #pragma mark - Core Data stack
@@ -122,17 +122,47 @@
 
 #pragma mark - Core Data Saving support
 
-- (void)saveContext {
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    if (managedObjectContext != nil) {
-        NSError *error = nil;
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
+- (BOOL)saveContext:(NSManagedObjectContext*)context
+{
+    NSError *error = nil;
+    BOOL saveParent = NO;
+    __block BOOL privateContextHaveChanges = NO;
+    __block BOOL saveParentContext         = NO;
+    
+    //Check for changes
+    
+    // on this example we're using a private queue for creating objects so we should syncronously ask
+    // to the context if there's any changes
+    if (context.concurrencyType == NSPrivateQueueConcurrencyType) {
+        [context performBlockAndWait:^{
+            privateContextHaveChanges =  [context hasChanges];
+        }];
+    }else
+        privateContextHaveChanges = [context hasChanges];
+    
+    
+    //if occur any error during saving spill it out. Set error to nil for later reuse
+    error != nil ? NSLog(@"Unresolved error %@, %@", error, [error userInfo]) : NSLog(@"save ok");
+    error  = nil;
+    
+    //this example mainContext is always in main thread
+    [context.parentContext performBlockAndWait:^{
+        saveParentContext =  [context.parentContext hasChanges];
+    }];
+    
+    //save if model has changes
+    if (context != nil) {
+        if (privateContextHaveChanges || saveParentContext) {
+            [context save:&error];
+            if (context.parentContext!=nil) [context.parentContext save:&error];
         }
     }
+
+    
+    error != nil ? NSLog(@"Unresolved error on parent context %@, %@", error, [error userInfo]) :
+    ( saveParent ? NSLog(@"parent save ok") : NSLog(@"no object in parent context") );
+    
+    return error == nil ;
 }
 
 - (void)createDummyData{
@@ -142,7 +172,6 @@
     Alfred.age = @80;
     Alfred.lastname = @"Hitchcock";
     Alfred.department = self.departmentNameFeed[0];
-    [self saveContext];
 
     
     People *Keanu = [NSEntityDescription insertNewObjectForEntityForName:@"People"
@@ -156,8 +185,6 @@
     People *Lionel = [NSEntityDescription insertNewObjectForEntityForName:@"People"
                                                    inManagedObjectContext:self.managedObjectContext];
     
-    [self saveContext];
-
     Lionel.name = @"Lionel";
     Lionel.age = @70;
     Lionel.lastname = @"Richie";
@@ -178,7 +205,7 @@
     Jennifer.lastname = @"Aniston";
     Jennifer.department = self.departmentNameFeed[2];;
     
-    [self saveContext];
+    [self saveContext:self.managedObjectContext];
 }
 
 #pragma mark - properties

@@ -86,10 +86,7 @@
 
 
 - (IBAction)addEntryAction:(id)sender {
-    //create a private context/
     
-    //This is a private context, used for CRUD operations on objects without fire KVO notifications because does not operate on the main threat
-
     [CoreDataDAL saveInbackgroundOnPrivateQueue:^(NSManagedObjectContext *localContext) {
         
         People *randomPeople = [NSEntityDescription insertNewObjectForEntityForName:@"People"                                                                       inManagedObjectContext:localContext];
@@ -99,9 +96,8 @@
         randomPeople.age  = @(50+index);
         randomPeople.lastname = _appDelegate.peopleLastNameFeed[index];
         randomPeople.department = _appDelegate.departmentNameFeed[index];
-
-    } completion:^(BOOL finished) {
-        if (finished)
+    } completion:^(BOOL contextDidSave) {
+        if (contextDidSave)
             NSLog(@"Seems that context save perfect");
             else
             NSLog(@"Context fail when saving");
@@ -125,10 +121,14 @@
     NSInteger randomRow = arc4random_uniform((u_int32_t)numberOfRows);
     
     
-    People *peopleObject = (People*)[self.fetchedResultController objectAtIndexPath:[NSIndexPath indexPathForRow:randomRow inSection:randomSection]];
+    People *peopleObject = (People*)[self.fetchedResultController objectAtIndexPath:
+                                     [NSIndexPath indexPathForRow:randomRow
+                                                        inSection:randomSection]];
     
-    [_appDelegate.managedObjectContext deleteObject:peopleObject];
-    [_appDelegate saveContext];
+    NSManagedObjectContext *objectContext = [peopleObject managedObjectContext];
+    [objectContext deleteObject:peopleObject];
+    
+    [_appDelegate saveContext:objectContext];
 }
 
 
